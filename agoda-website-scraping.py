@@ -63,6 +63,7 @@ while True:
         ## collect all room type ##
         hotel_all_room_type_info = soup.find('div',{'class':'RoomGrid-content'}).contents
         for hotel_room_type_info in hotel_all_room_type_info:
+            hotel_id = hotel_room_type_info['id'] # use in feature finding function
             hotel_room_type_span = hotel_room_type_info.find('span',{'data-selenium':'masterroom-title-name'})
             if hotel_room_type_span is not None: # check whether hotel_room_type obj is not 1) recommend tab or 2) sold out
                 hotel_room_type_name = hotel_room_type_span.get_text() # get room type text
@@ -126,7 +127,7 @@ driver.quit()
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import time
-chrome_driver_path_com9 = r'C:\Users\5842005226\Desktop\chromedriver.exe'
+chrome_driver_path_com9 = r'/Users/pudit/Downloads/chromedriver'
 chrome_driver_path_home = r'C:\Users\Paem\Desktop\chromedriver.exe'
 driver = webdriver.Chrome(chrome_driver_path_com9)
 agoda_link = 'https://www.agoda.com/pages/agoda/default/DestinationSearchResult.aspx?city=9395&checkIn=2019-02-16&los=1&rooms=1&adults=2&children=0&cid=-218&languageId=1&userId=4f5832b5-d4c3-4f4e-b879-07304220c449&sessionId=qxbkxohvb22ukr5a0jkjuaac&pageTypeId=1&origin=TH&locale=en-US&aid=130589&currencyCode=USD&htmlLanguage=en-us&cultureInfoName=en-US&ckuid=4f5832b5-d4c3-4f4e-b879-07304220c449&prid=0&checkOut=2019-02-17&priceCur=USD&textToSearch=Bangkok&productType=-1&travellerType=1'
@@ -156,3 +157,20 @@ driver.close()
 driver.switch_to_window(default_handle)
 ######################################################################
 
+def sliding_window(): # sliding window until find the element
+    return None
+    
+def find_hotel_feature(driver,hotel_id):
+    element_path = '//*[@id="' + hotel_id + '"]/div[1]/div[1]/a/div/div[1]/span'
+    driver.find_element_by_xpath(element_path).click() # apply click on the element
+    time.sleep(2)
+    completed_raw_html = driver.execute_script("return document.documentElement.outerHTML")
+    soup = BeautifulSoup(completed_raw_html,'lxml')
+    all_pop_up_element = soup.find_all('div',{'class':'ReactModalPortal'})
+    index = 0
+    while True:
+        pop_up_element_consider = all_pop_up_element[index]
+        if pop_up_element_consider.find('div',{'class':'details__info-area'}) is not None:
+            # extract all feature in string
+            return None
+    
