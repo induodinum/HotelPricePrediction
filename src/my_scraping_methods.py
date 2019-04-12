@@ -9,6 +9,7 @@ import time # slow down the algorithm
 import re
 import datetime
 import random
+import os
 
 def clear_list():
     Hotel_name = []
@@ -67,8 +68,18 @@ def close_unused_tab(driver, default_window_handle): # close the tab that is loc
 def save_to_pkl(count, datapath, d):
     t_date = datetime.datetime.now()
     today = t_date.isoformat()[:10]
-    
-    filehandler = open("{}hotel_price_{}_.pkl".format(datapath, today),"wb")
+    i = 1
+
+    while(i):
+        filename = "{}hotel_price_{}_{}.pkl".format(datapath, today, i)
+        exists = os.path.isfile(filename)
+        if exists:
+            i += 1
+        else:
+            filehandler = open(filename, 'wb')
+            print(filename)
+            break
+
     pickle.dump(d,filehandler)
     filehandler.close()
 
@@ -133,7 +144,7 @@ def find_next_btn(driver):
 # In[30]:
 
 
-def click_next_page(driver,n,m=random.randint(16,22)):   # n is the number of clicks, m is the number of arrow up's
+def click_next_page(driver,n,m=random.randint(22,30)):   # n is the number of clicks, m is the number of arrow up's
     if(n!=0):
         for i in range(n):
             scroll_to_the_end_of_page(driver)
@@ -193,8 +204,8 @@ def get_scraped_data(each_hotel_raw_html, data_static, hotel_all_info, prices_le
                             hotel_all_info[4].append(hotel_room_benefits)
                             hotel_all_info[5].append(datetime.datetime.now())
 
-
                             prices_length += 1
+                            print('prices_length ++')
                     else:
                         pass
             else:

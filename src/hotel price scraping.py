@@ -27,7 +27,7 @@ scroll_height = 300
 # In[71]:
 
 
-def scrape_hotel_data(n_page_clicked):
+def scrape_hotel_data(next_page_clicked):
     print('-3')
 #     driver = *args[0]
 #     data_static = *args[1]
@@ -37,26 +37,22 @@ def scrape_hotel_data(n_page_clicked):
     datapath = 'C:/Users/Indy/Desktop/coding/HotelPricePrediction/data/'
     driver = get_webdriver()
     data_static = get_data_static(datapath)
-    next_page_clicked = n_page_clicked.value
     
     print('-2')
     
-    page_clicked = click_next_page(driver, next_page_clicked)
-    next_page_clicked += page_clicked
+    click_next_page(driver, next_page_clicked.value)
     
     print('-1')
-    n_page_clicked.value = next_page_clicked
 
     Hotel_name, Hotel_roomtype, Hotel_prices,  Hotel_prices_standard, Hotel_benefits, Time_collect = clear_list()
     file_count = 0
     prices_length = 0
-    next_page_clicked = 0
-    prices_memory_limit = 1000
+    prices_memory_limit = 100
 
     # Start scraping
 
-    P = 2
-    H = 10000
+    P = 1
+    H = 150
 
     for it in range(P):     # P = number of pages to scrape
         print('0')
@@ -65,7 +61,7 @@ def scrape_hotel_data(n_page_clicked):
             driver.maximize_window()
         except WebDriverException:
             pass
-        time.sleep(2)
+        time.sleep(3)
 
         print('1')
 
@@ -78,47 +74,59 @@ def scrape_hotel_data(n_page_clicked):
         for it2 in range(H):    # H = number of hotels to scrape
             print('2')
             last_height = scroll_page_till_find(1.2,last_height,scroll_height,click_elements[element_index],driver)
-            time.sleep(0.5) # wait for the data to be loaded
-            click_elements_new = driver.find_elements_by_xpath('//h3[@class="hotel-name"]') # get the loaded data
+            time.sleep(2) # wait for the data to be loaded
+            try:
+                click_elements_new = driver.find_elements_by_xpath('//h3[@class="hotel-name"]') # get the loaded data
+            except NoSuchElementException:
+                time.sleep(1.2)
+                actions = ActionChains(driver)
+                actions.move_by_offset(-100,-100)
+                actions.perform()
+                print('no such element')
+                time.sleep(0.5)
+
+                try:
+                    alert = driver.switch_to.alert
+                    alert.dismiss()
+                except:
+                    pass
+
+                click_elements_new = driver.find_elements_by_xpath('//h3[@class="hotel-name"]')
 
             if len(click_elements_new) > len(click_elements): # if new data loaded -> update the data
                 click_elements = click_elements_new # update the data
 
             try: # try to click the element
-                click_elements[element_index].click() # click the element
+                element = click_elements[element_index]
+                driver.execute_script("$(arguments[0]).click();", element) # click the element
             except WebDriverException: # if cannot -> close the popup
                 try:
-                    time.sleep(3)
+                    time.sleep(1.2)
                     actions = ActionChains(driver)
-                    actions.move_by_offset(-500,-300)
-                    actions.click()
+                    actions.move_by_offset(-100,-100)
                     actions.perform()
                     print('no such element')
                     time.sleep(0.5)
                 except:
                     try:
+                        popup = driver.find_element_by_xpath('//div[@class="LeaveSitePopup-Background"]')
                         print('found popup')
-                        popup_close = driver.find_element_by_xpath('//div[@class="LeaveSitePopup-CloseArea"]/span')
-                        popup_close.click() # close the popup
+                        time.sleep(2)
+                        
+                        closepopup_btn = driver.find_element_by_xpath('//span[@class="ficon ficon-16 ficon-x-icon ficon-line-close close-button-top"]')
+                        closepopup_btn.click()
+
+                        # popup_close = driver.find_element_by_xpath('//div[@class="LeaveSitePopup-CloseArea"]/span')
+                        # popup_close.click() # close the popup
 
                         # click somewhere else which isn't a popup
                         print('closed popup')
-                    except NoSuchElementException:
-                        somewhere_area = driver.find_element_by_xpath('//div[@class="Filter__Container"]')
-                        actions = ActionChains(driver)
-                        actions.move_to_element_with_offset(somewhere_area,0,0)
-                        actions.click()
-                        actions.perform()
-                        print('close popup')
-                        time.sleep(0.5)
+                    except:
+                        print('error!!!')
+                        continue
 
-                        try:
-                            print('dunno what to do')
-                        except:
-                            pass
-
-                click_elements_2 = driver.find_elements_by_xpath('//h3[@class="hotel-name"]')
-                click_elements_2[element_index].click() # click the element again
+                    click_elements_2 = driver.find_elements_by_xpath('//h3[@class="hotel-name"]')
+                    click_elements_2[element_index].click() # click the element again
 
             time.sleep(1) # browser wait
             driver.switch_to_window(driver.window_handles[1]) # switch to next window
@@ -126,7 +134,7 @@ def scrape_hotel_data(n_page_clicked):
             each_hotel_raw_html = driver.execute_script("return document.documentElement.outerHTML") # scrape the data
             
             hotel_all_info = [Hotel_name, Hotel_roomtype, Hotel_prices, Hotel_prices_standard, Hotel_benefits, Time_collect]
-            hotel_all_info = get_scraped_data(each_hotel_raw_html, data_static, hotel_all_info, prices_length)
+            hotel_all_info, prices_length = get_scraped_data(each_hotel_raw_html, data_static, hotel_all_info, prices_length)
 
             driver.switch_to_window(default_window_handle)
             close_unused_tab(driver, default_window_handle)
@@ -135,7 +143,7 @@ def scrape_hotel_data(n_page_clicked):
                 prices_length = 0
 
                 file_count += 1
-                print(file_count)
+                print('file count:', file_count)
 
                 d = {
                 'Hotel_name':hotel_all_info[0],
@@ -162,25 +170,25 @@ def scrape_hotel_data(n_page_clicked):
             scroll_page_till_find(1.1,last_height,scroll_height,next_element,driver)
             #break
             next_element.click()
-            next_page_clicked += 1
+            next_page_clicked.value += 1
             print('next page clicked', next_page_clicked)
             time.sleep(5)
         except WebDriverException:
             break
-            
-    n_page_clicked.value = next_page_clicked
-    print('next page to click: ', n_page_clicked.value)
+    
+    print('next page to click: ', next_page_clicked.value)
 
 # In[78]:
 
 
 if __name__=='__main__':
     next_page_clicked = 1
-    times = 1000
+    times = 30
     tenmin = 10
     
     # q = JoinableQueue()
-    n_page_clicked = Value('i', 0)
+    start_page = 8
+    n_page_clicked = Value('i', start_page)
         
     for i in range(times):
         print('n_page_c before', n_page_clicked.value)
@@ -190,7 +198,10 @@ if __name__=='__main__':
         print('-4')
         
         p.join()
+        time.sleep(random.uniform(0.5,3))
         print('stopped process')
 
         n_page_clicked.value += 1
         print('n_page_c after', n_page_clicked.value)
+
+    
