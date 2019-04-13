@@ -16,6 +16,7 @@ import time # slow down the algorithm
 import re
 import datetime
 import random
+import sys
 
 from multiprocessing import Process, JoinableQueue, Value
 
@@ -173,10 +174,10 @@ def scrape_hotel_data(next_page_clicked):
 
 if __name__=='__main__':
     next_page_clicked = 1
-    times = 30
+    times = 35
     
     # q = JoinableQueue()
-    start_page = 6
+    start_page = int(sys.argv[1])
     n_page_clicked = Value('i', start_page-1)
         
     for i in range(times):
