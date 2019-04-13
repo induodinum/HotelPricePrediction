@@ -51,10 +51,10 @@ def scrape_hotel_data(next_page_clicked):
 
     # Start scraping
 
-    P = 1
-    H = 150
+    P = 1               # P = number of pages to scrape
+    H = 20000           # H = number of hotel rooms to scrape
 
-    for it in range(P):     # P = number of pages to scrape
+    for it in range(P):     
         print('0')
         continue_scrape = False   ## if continue scrape <- change this to TRUE
         try:
@@ -71,7 +71,7 @@ def scrape_hotel_data(next_page_clicked):
             last_height = 0
             element_index = 0
             click_elements = driver.find_elements_by_xpath('//h3[@class="hotel-name"]') # get the original click element
-        for it2 in range(H):    # H = number of hotels to scrape
+        for it2 in range(H):    
             print('2')
             last_height = scroll_page_till_find(1.2,last_height,scroll_height,click_elements[element_index],driver)
             time.sleep(2) # wait for the data to be loaded
@@ -80,16 +80,10 @@ def scrape_hotel_data(next_page_clicked):
             except NoSuchElementException:
                 time.sleep(1.2)
                 actions = ActionChains(driver)
-                actions.move_by_offset(-100,-100)
+                actions.move_by_offset(-100,-100)       # move cursor by (100,100) to remove popup
                 actions.perform()
                 print('no such element')
                 time.sleep(0.5)
-
-                try:
-                    alert = driver.switch_to.alert
-                    alert.dismiss()
-                except:
-                    pass
 
                 click_elements_new = driver.find_elements_by_xpath('//h3[@class="hotel-name"]')
 
@@ -99,34 +93,27 @@ def scrape_hotel_data(next_page_clicked):
             try: # try to click the element
                 element = click_elements[element_index]
                 driver.execute_script("$(arguments[0]).click();", element) # click the element
-            except WebDriverException: # if cannot -> close the popup
+                # element.click()
+            except: # if cannot -> close the popup
                 try:
-                    time.sleep(1.2)
-                    actions = ActionChains(driver)
-                    actions.move_by_offset(-100,-100)
-                    actions.perform()
-                    print('no such element')
-                    time.sleep(0.5)
-                except:
-                    try:
-                        popup = driver.find_element_by_xpath('//div[@class="LeaveSitePopup-Background"]')
-                        print('found popup')
-                        time.sleep(2)
-                        
-                        closepopup_btn = driver.find_element_by_xpath('//span[@class="ficon ficon-16 ficon-x-icon ficon-line-close close-button-top"]')
-                        closepopup_btn.click()
+                    popup = driver.find_element_by_xpath('//div[@class="LeaveSitePopup-Background"]')
+                    print('found popup')
+                    time.sleep(2)
+                    
+                    closepopup_btn = driver.find_element_by_xpath('//div[@class="LeaveSitePopup-CloseArea"]')
+                    closepopup_btn.click()
 
-                        # popup_close = driver.find_element_by_xpath('//div[@class="LeaveSitePopup-CloseArea"]/span')
-                        # popup_close.click() # close the popup
+                    # popup_close = driver.find_element_by_xpath('//div[@class="LeaveSitePopup-CloseArea"]/span')
+                    # popup_close.click() # close the popup
 
-                        # click somewhere else which isn't a popup
-                        print('closed popup')
-                    except:
-                        print('error!!!')
-                        continue
+                    # click somewhere else which isn't a popup
+                    print('closed popup')
+                except NoSuchElementException:
+                    print('error!!!')
+                    continue
 
-                    click_elements_2 = driver.find_elements_by_xpath('//h3[@class="hotel-name"]')
-                    click_elements_2[element_index].click() # click the element again
+                click_elements_2 = driver.find_elements_by_xpath('//h3[@class="hotel-name"]')
+                click_elements_2[element_index].click() # click the element again
 
             time.sleep(1) # browser wait
             driver.switch_to_window(driver.window_handles[1]) # switch to next window
@@ -166,14 +153,17 @@ def scrape_hotel_data(next_page_clicked):
                 break
 
         try: # try to click the next-page button
+            print('3')
             next_element = driver.find_element_by_xpath('//div[@class="clearfix pagination-panel"]/div/button[@id="paginationNext"]') # เสือกกด previous
             scroll_page_till_find(1.1,last_height,scroll_height,next_element,driver)
             #break
+            print('4')
             next_element.click()
             next_page_clicked.value += 1
             print('next page clicked', next_page_clicked)
             time.sleep(5)
         except WebDriverException:
+            print('5')
             break
     
     print('next page to click: ', next_page_clicked.value)
@@ -184,11 +174,10 @@ def scrape_hotel_data(next_page_clicked):
 if __name__=='__main__':
     next_page_clicked = 1
     times = 30
-    tenmin = 10
     
     # q = JoinableQueue()
-    start_page = 8
-    n_page_clicked = Value('i', start_page)
+    start_page = 6
+    n_page_clicked = Value('i', start_page-1)
         
     for i in range(times):
         print('n_page_c before', n_page_clicked.value)
