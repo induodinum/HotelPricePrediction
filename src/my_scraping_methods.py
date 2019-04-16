@@ -10,6 +10,7 @@ import re
 import datetime
 import random
 import os
+import sys
 
 def clear_list():
     Hotel_name = []
@@ -102,14 +103,25 @@ def get_data_static(datapath):
 
 
 def get_webdriver():
+    path_to_choose = int(sys.argv[1])
+
     chrome_driver_path_com9 = r'C:\Users\5842005226\Desktop\chromedriver.exe'
     home_indy_path = r'E:\Downloads\Programs\chromedriver_win32\chromedriver.exe'
     mac_indy_path = '/Users/Indy/Downloads/chromedriver'
 
-    driver = webdriver.Chrome(home_indy_path)  # choose one path
+    if(path_to_choose==0):
+        driver_path = home_indy_path
+    elif(path_to_choose==1):
+        driver_path = mac_indy_path
+    elif(path_to_choose==2):
+        driver_path = chrome_driver_path_com9
+    else:
+        print('error: please specify path_to_choose variable')
+
+    driver = webdriver.Chrome(driver_path)  # choose one path
 
     # change the link here
-    agoda_link = 'https://www.agoda.com/pages/agoda/default/DestinationSearchResult.aspx?city=9395&checkIn=2019-04-20&los=1&rooms=1&adults=2&children=0&cid=-1&languageId=1&userId=7deafcf4-77d1-43a5-92b9-dd8f64158191&sessionId=jrdsi52uxzlsvmsjfidmyzar&pageTypeId=1&origin=TH&locale=en-US&aid=130243&currencyCode=THB&htmlLanguage=en-us&cultureInfoName=en-US&ckuid=7deafcf4-77d1-43a5-92b9-dd8f64158191&prid=0&checkOut=2019-04-21&priceCur=THB&textToSearch=Bangkok&travellerType=1&familyMode=off&productType=1&hotelStarRating=5,4,3,2,1&sort=reviewAll'
+    agoda_link = 'https://www.agoda.com/pages/agoda/default/DestinationSearchResult.aspx?asq=u2qcKLxwzRU5NDuxJ0kOFw4s7KWyGVSvTGLb%2BBtDX6wZbrmcnqjJlDEAkT%2FKJtY7OWxVG2qgdpyu3bLXjiZR2KWuedcGSZlNYydaj7rz4Gx1wD5XkTU%2Fis72FAOE5jBUZ1DtCS1xzNFQ0xErllz15hA%2FwzJ3blEongJnkjCUJpEtkM3epC9LAJLc78FaxvzOV2wSZTw3HszKHRMToXsIrxSPLC%2FyaNRZcErlTGgwmYw%3D&city=9395&tick=636910297254&languageId=22&userId=b10180da-ee8d-4c51-879e-435f11718baa&sessionId=rws05azqi3fw0dwwftr00vzq&pageTypeId=1&origin=TH&locale=th-TH&cid=-1&aid=130243&currencyCode=THB&htmlLanguage=th-th&cultureInfoName=th-TH&ckuid=b10180da-ee8d-4c51-879e-435f11718baa&prid=0&checkIn=2019-04-20&checkOut=2019-04-21&rooms=1&adults=2&children=0&priceCur=THB&los=1&textToSearch=%E0%B8%81%E0%B8%A3%E0%B8%B8%E0%B8%87%E0%B9%80%E0%B8%97%E0%B8%9E&travellerType=1&familyMode=off&productType=1&hotelStarRating=5,4,3,2,1&sort=reviewAll'
     driver.get(agoda_link)
 
     try:
@@ -145,6 +157,9 @@ def find_next_btn(driver):
 
 
 def click_next_page(driver,n,m=random.randint(22,30)):   # n is the number of clicks, m is the number of arrow up's
+    path_to_choose = int(sys.argv[1])
+    if(path_to_choose!=0):
+        m = random.randint(38,45)
     if(n!=0):
         for i in range(n):
             scroll_to_the_end_of_page(driver)

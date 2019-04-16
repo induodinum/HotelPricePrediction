@@ -35,7 +35,15 @@ def scrape_hotel_data(next_page_clicked):
 #     page_clicked = *args[2]
 #     driver, data_static, page_clicked
 
-    datapath = 'C:/Users/Indy/Desktop/coding/HotelPricePrediction/data/'
+    path_to_choose = int(sys.argv[1])
+
+    if(path_to_choose==0):
+        datapath = 'C:/Users/Indy/Desktop/coding/HotelPricePrediction/data/'
+    elif(path_to_choose==1):
+        datapath = '/Users/Indy/Desktop/coding/HotelPricePrediction/data/'
+    else:
+        print('error: please specify path_to_choose variable')
+
     driver = get_webdriver()
     data_static = get_data_static(datapath)
     
@@ -177,8 +185,8 @@ if __name__=='__main__':
     times = 35
     
     # q = JoinableQueue()
-    start_page = int(sys.argv[1])
-    # start_page = 12
+    start_page = int(sys.argv[2])
+    # start_page = 17
     n_page_clicked = Value('i', start_page-1)
         
     for i in range(times):
