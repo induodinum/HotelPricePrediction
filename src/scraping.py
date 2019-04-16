@@ -178,7 +178,7 @@ if __name__=='__main__':
     
     # q = JoinableQueue()
     start_page = int(sys.argv[1])
-    # start_page = 17
+    # start_page = 12
     n_page_clicked = Value('i', start_page-1)
         
     for i in range(times):

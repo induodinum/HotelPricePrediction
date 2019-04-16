@@ -109,7 +109,7 @@ def get_webdriver():
     driver = webdriver.Chrome(home_indy_path)  # choose one path
 
     # change the link here
-    agoda_link = 'https://www.agoda.com/pages/agoda/default/DestinationSearchResult.aspx?city=9395&languageId=1&userId=7deafcf4-77d1-43a5-92b9-dd8f64158191&sessionId=jrdsi52uxzlsvmsjfidmyzar&pageTypeId=103&origin=TH&locale=en-US&cid=-1&aid=130243&currencyCode=THB&htmlLanguage=en-us&cultureInfoName=en-US&ckuid=7deafcf4-77d1-43a5-92b9-dd8f64158191&prid=0&checkIn=2019-04-20&checkOut=2019-04-21&rooms=1&adults=2&children=0&priceCur=THB&los=1&textToSearch=Bangkok&travellerType=1&familyMode=off&productType=1&hotelStarRating=5,4,3,2,1&sort=reviewAll'
+    agoda_link = 'https://www.agoda.com/pages/agoda/default/DestinationSearchResult.aspx?city=9395&checkIn=2019-04-20&los=1&rooms=1&adults=2&children=0&cid=-1&languageId=1&userId=7deafcf4-77d1-43a5-92b9-dd8f64158191&sessionId=jrdsi52uxzlsvmsjfidmyzar&pageTypeId=1&origin=TH&locale=en-US&aid=130243&currencyCode=THB&htmlLanguage=en-us&cultureInfoName=en-US&ckuid=7deafcf4-77d1-43a5-92b9-dd8f64158191&prid=0&checkOut=2019-04-21&priceCur=THB&textToSearch=Bangkok&travellerType=1&familyMode=off&productType=1&hotelStarRating=5,4,3,2,1&sort=reviewAll'
     driver.get(agoda_link)
 
     try:
