@@ -1,19 +1,2 @@
-[0406/231852.029:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
-[0406/234048.614:ERROR:file_io_win.cc(161)] CreateFile C:\Users\Indy\AppData\Local\Temp\scoped_dir13452_5249\Crashpad\settings.dat: The system cannot find the path specified. (0x3)
-[0406/234048.615:ERROR:file_io_win.cc(170)] CreateFile C:\Users\Indy\AppData\Local\Temp\scoped_dir13452_5249\Crashpad\reports\8cbf4513-7cf0-4ef8-a657-6c816e7ec176.dmp: The system cannot find the path specified. (0x3)
-[0406/234048.615:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
-[0409/233501.968:ERROR:file_io_win.cc(161)] CreateFile C:\Users\Indy\AppData\Local\Temp\scoped_dir18176_4011\Crashpad\settings.dat: The system cannot find the path specified. (0x3)
-[0409/233501.970:ERROR:file_io_win.cc(170)] CreateFile C:\Users\Indy\AppData\Local\Temp\scoped_dir18176_4011\Crashpad\reports\63dc1842-0d86-4f4b-a775-b6d188a4400f.dmp: The system cannot find the path specified. (0x3)
-[0409/233501.970:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
-[0410/133717.717:ERROR:file_io_win.cc(170)] CreateFile C:\Users\Indy\AppData\Local\Temp\scoped_dir19280_16819\Crashpad\reports\0a7ecc9a-19e7-405e-9421-7d4993912e2c.dmp: The system cannot find the path specified. (0x3)
-[0410/133717.719:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
-[0414/012722.458:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
-[0414/012722.462:ERROR:exception_snapshot_win.cc(98)] thread ID 6108 not found in process
-[0414/012859.298:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
-[0414/012859.299:ERROR:exception_snapshot_win.cc(98)] thread ID 5512 not found in process
-[0414/020535.172:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
-[0414/020535.174:ERROR:exception_snapshot_win.cc(98)] thread ID 8104 not found in process
-[0414/133018.625:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
-[0414/133018.627:ERROR:exception_snapshot_win.cc(98)] thread ID 1724 not found in process
-[0414/211914.367:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
-[0414/211914.369:ERROR:exception_snapshot_win.cc(98)] thread ID 8536 not found in process
+[0416/160607.529:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0416/160607.531:ERROR:exception_snapshot_win.cc(98)] thread ID 15032 not found in process
